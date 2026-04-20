@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="../css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <style>
+    .cart {
+      font-size: 1.3rem;
+      height: 20px;
+      color: #000;
+    }
+
+    .img {
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 10px;
+      height: 400px;
+      width: 50%;
+
+
+    }
+
+    .header {
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .price {
+      display: flex;
+      justify-content: start;
+      margin-top: 5px;
+
+    }
+
+    .add {
+
+      display: flex;
+      justify-content: center;
+      background-color: black;
+      color: white;
+      cursor: pointer;
+      border-radius: 2px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    #cart-count {
+      position: absolute;
+      right: 5px;
+      top: 10px;
+      background: #000;
+      border-radius: 18px;
+      font-size: 12px;
+      color: #FFF;
+      height: 20px;
+      width: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+
+    }
+
+    #cart-count {
+      position: absolute;
+      right: 5px;
+      top: 10px;
+      background: red;
+      border-radius: 18px;
+      font-size: 12px;
+      color: #FFF;
+      height: 20px;
+      width: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .section {
+      margin-top: 20px;
+    }
+
+    .footer {
+      background-color: #f8f9fa;
+      padding-top: 100px;
+    }
+
+    .footer h5 {
+      margin-bottom: 1rem;
+    }
+
+    .footer a {
+      text-decoration: none;
+      color: #6c757d;
+    }
+
+    .footer a:hover {
+      color: #000;
+    }
+
+    .last {
+      margin-top: 50px;
+    }
+
+    .zoom-effect {
+      transition: transfom 0.10s;
+
+    }
+
+    .zoom-effect:hover {
+      transform: scale(1.05);
+    }
+
+    .cart {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 360px;
+      height: 100%;
+      background: #FFF;
+      box-shadow: -2px 0 10px rgb(0, 0, 0, 0.1);
+      padding: 65px 20px 40px;
+      z-index: 100;
+      overflow: auto;
+      transition: 0.5s;
+
+    }
+
+    .cart.active {
+      right: 0;
+    }
+
+    .cart-title {
+      text-align: center;
+      font-size: 30px;
+    }
+
+    .cart-box {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+
+    }
+
+    .cart-box img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 20px;
+
+    }
+
+    .cart-detail {
+
+      display: grid;
+      gap: 8px;
+      margin-right: auto;
+
+    }
+
+    .cart-product-title {
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    .cart-price {
+      font-weight: 500;
+
+    }
+
+    .cart-quantity {
+      display: flex;
+      width: 100px;
+      border: 1px solid #999;
+      border-radius: 6px;
+    }
+
+    .cart-quantity button {
+      background: transparent;
+      width: 20px;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .cart-quantity #decrement {
+      color: #999;
+      border-left: 1px solid #999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      border-right: 1px solid #999;
+      cursor: pointer;
+    }
+
+    .cart-quantity #increment {
+      border-left: 1px solid #999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      border-right: 1px solid #999;
+      cursor: pointer;
+    }
+
+    .cart-quantity .number {
+      border-left: 1px solid #999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      border-right: 1px solid #999;
+      cursor: default;
+    }
+
+    .cart-remove {
+      font-size: 20px;
+      cursor: pointer;
+      margin-top: 80px;
+    }
+
+    .total {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      border-top: 20px;
+      margin-top: 18px;
+      font-size: 18px;
+
+    }
+
+    .total-price {
+      margin-left: 10px;
+      font-weight: 600;
+    }
+
+    .btn-buy {
+      display: flex;
+      padding: 10px 30px;
+      background: #e35f26;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      color: #FFF;
+      margin: 20px auto 0;
+      cursor: pointer;
+    }
+
+    #cart-close {
+      position: absolute;
+      top: 20px;
+      right: 15px;
+      font-size: 35px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <nav class="navbar navbar-expand-lg bg-light">
+          <div class="container-fluid">
+            <a class="navbar-brand fw-bold text-center fs-2" href="#">BREEZ'A COLLECTION</a>
+            <div class="cart-icon  " id="cart-icon"><span class="cart-item-count">0</span>
+              <i class="fa-solid fa-cart-shopping"></i>
+            </div>
+          </div>
+          <div class="cart">
+            <h2 class="cart-title">your cart</h2>
+            <div class="cart-content">
+              <!--<div class="cart-box">
+              <img src="../images/image.2.webp " class="cart-img">
+              <div class="cart-detail">
+                <h2 class="cart-product-title">fabric:</h2>
+                <span class="text-decoration-line-through">Rs.5,60000</span>
+                <span class="cart-price">34000</span>
+                
+                <div class="cart-quantity">
+                  <button class="decrement">-</button>
+                  <span class="number">1</span>
+                  <button class="increment">+</button>
+                </div>
+              </div>
+          
+              <i class="fa-solid fa-trash cart-remove"></i>
+            
+          </div>-->
+              <hr>
+            </div>
+            <div class="total ">
+              <div class="total-title">TOTAL:</div>
+              <div class="total-price">PKR:0</div>
+            </div>
+            <hr>
+            <button class="btn-buy">BUY NOW</button>
+            <i class="fa-solid fa-xmark" id="cart-close"></i>
+          </div>
+        </nav>
+        <h2 class="header mt-4 fw-semibold text-dark ms-3 mb-4 text-center text-decoration-underline">Women collection
+        </h2>
+        <div class="container text-center">
+          <div class="section">
+            <div class="row product-content">
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image.2.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body">
+                    <p class="card-text product-title"> Fabric : SILK EMBROIDERED</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.5,9000</span>
+                      <p class="Text-muted  mx-5  price total"><span
+                          class="text-danger Text-muted mx-5 price">Rs.5,3000.00</span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image3.webp " class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body">
+                    <p class="card-text product-title"> Fabric : SILK EMBROIDERED</p>
+                    <span class="text-decoration-line-through ">Rs.9,6000</span>
+                    <p class="Text-muted price mx-5 "><span class="text-danger Text-muted price mx-5 ">Rs.6,599.00
+                      </span></p>
+                    <div class="cart-controls price-and-cart text-center">
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/images.1.webp " class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body">
+
+                    <p class="card-text product-title"> Fabric : SILK EMBROIDERED </p>
+                    <span class="text-decoration-line-through ">Rs.10,600</span>
+                    <p class="Text-muted price mx-5 "><span class="text-danger Text-muted price mx-5 ">Rs.8,599.00
+                      </span></p>
+                    <p class="text-warning">★★★★★ (3 reviews)</p>
+                    <div class="cart-controls price-and-cart text-center">
+                      <button class="btn btn-dark add-cart">ADD TO CART </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="header mt-4 fw-semibold   text-dark ms-3 mb-4 text-center text-decoration-underline">Kid collection</h2>
+        <div class="container text-center">
+          <div class="section">
+            <div class="row">
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image4.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title"> shalwar-kameez </p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.3000</span>
+                      <p class="Text-muted  mx-5  price"><span
+                          class="text-danger Text-muted mx-5 price ">Rs.2,000</span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box ">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image5.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title"> shalwar-kameez</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.4000</span>
+                      <p class="Text-muted  mx-5  price"><span class="text-danger Text-muted mx-5 price ">Rs.3000
+                        </span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image6.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title"> track-suit</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.2000</span>
+                      <p class="Text-muted  mx-5  price"><span class="text-danger Text-muted mx-5 price ">Rs.1000</span>
+                      </p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="header mt-4 fw-semibold  text-dark ms-3 mb-4 text-center text-decoration-underline">Men collection
+        </h2>
+        <div class="container text-center">
+          <div class="section">
+            <div class="row">
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image8.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title"> white-dress</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.10,6000</span>
+                      <p class="Text-muted  mx-5  price"><span class="text-danger Text-muted mx-5 price ">Rs.12,599.00
+                        </span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image12.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="...">
+                  <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title">white-dress</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.5,1000</span>
+                      <p class="Text-muted  mx-5  price"><span class="text-danger Text-muted mx-5 price ">Rs.25,599.00
+                        </span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col product-box">
+                <div class="card  mx-3 img-box" style="width: 19rem;">
+                  <img src="../images/image11.webp" class="imd-fluid zoom-effect" class="card-img-top" alt="..."> <span
+                    class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger">-25%</span>
+                  <div class="card-body ">
+                    <p class="card-text product-title"> classic-dress</p>
+                    <div class="cart-controls  price-and-cart text-center">
+                      <span class="text-decoration-line-through ">Rs.3,750</span>
+                      <p class="Text-muted  mx-5  price"><span class="text-danger Text-muted mx-5 price ">Rs.4,200.00
+                        </span></p>
+                      <p class="text-warning">★★★★★ (3 reviews)</p>
+                      <button class="btn btn-dark add-cart">ADD TO CART </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="last">
+    <footer class="footer mt-auto py-3 bg-light  mt-3">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+            <h5>LET'S GET IN TOUCH</h5>
+            <p>+92-213 889 3968<br>+92 300 056 9696<br>customercare@bareezeman.com</p>
+            <p>Our stores are open for shopping and exchanges<br>Every day at 11am to 11pm</p>
+          </div>
+          <div class="col-md-4">
+            <h5>Quick link</h5>
+            <ul class="list-unstyled">
+              <li><a href="#">Catalogues</a></li>
+              <li><a href="#">Contact</a></li>
+              <li><a href="#">Track Order</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4">
+            <h5>Company</h5>
+            <ul class="list-unstyled">
+
+              <li><a href="#">Shipping & Returns</a></li>
+
+              <li><a href="#">Privacy Policy</a></li>
+
+              <li><a href="#">FAQs</a></li>
+
+            </ul>
+
+          </div>
+        </div>
+        <div class="text-center text-muted mt-3">
+          &copy; Bareeze All collection 2025. All Rights Reserved.
+        </div>
+      </div>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"> </script>
+    <script src="cart.js"></script>
+</body>
+
+</html>
